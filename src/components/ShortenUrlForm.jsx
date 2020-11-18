@@ -6,6 +6,7 @@ import axios from 'axios';
 const ShortenUrlForm = () => {
     const [value, setValue] = useState('');
     const [shortUrl, setShortUrl] = useState('');
+    const [error, setError] = useState(false);
 
     const onChange = useCallback((e) => {
         // TODO: Set the component's new state based on the user's input
@@ -13,29 +14,40 @@ const ShortenUrlForm = () => {
     }, [value]);
 
     const onSubmit = useCallback((e) => {
-        e.preventDefault();
-        // TODO: shorten url and copy to clipboard
-        axios
-            .post('/url', { value })
-            .then(({ data }) => {
-                console.log(data);
-            })
-            .catch((err) => {
-                console.log('error in catch on post request: ', err);
-            });
+        (async () => {
+            e.preventDefault();
+            try {
+                const { data } = await axios.post('/url', { value });
+                if (data.error) {
+                    setError(data.error);
+                    setValue('');
+                    document.getElementById('shorten').value = null;
+                } else {
+                    setShortUrl(data.shortUrl);
+                    setError(data.error);
+                    setValue('');
+                    document.getElementById('shorten').value = null;
+                }
+            } catch (err) {
+                setError(true);
+            }
+        })();
     }, [value]);
 
     return (
         <form onSubmit={onSubmit}>
+            {error && <p>Unfortunatelly, an error occured. Please, try again</p>}
             <label htmlFor="shorten">
                 Url:
                 <input placeholder="Url to shorten" id="shorten" type="text" value={value} onChange={onChange} />
             </label>
             <input type="submit" value="Shorten and copy URL" onSubmit={onSubmit} />
             {/* TODO: show below only when the url has been shortened and copied */}
-            <div>
-                {/* Show shortened url --- copied! */}
-            </div>
+            {shortUrl && (
+                <div>
+                    {`localhost:8080/${shortUrl}`}
+                </div>
+            )}
         </form>
     );
 };
