@@ -2,24 +2,36 @@ const express = require('express');
 const app = express();
 const db = require('./db');
 const { nanoid } = require('nanoid');
+const axios = require('axios');
 
 app.use(express.json());
 
 app.post('/url', async (req, res) => {
     // expect an object {value: long_url} in req.body
     let { value: longUrl } = req.body;
-    // don't accept empty input
+    // don't accept empty input. stop executing if so and send an error message to the clien
     if (!longUrl) {
-        res.json({ error: true });
+        res.json({
+            error: 'Please, enter the URL you want to shorten into the field below.'
+        });
         return;
     } 
-    // prepare the url for storing in the right format
+    // prepare the url for storing in the right format and checking validity
     if (!longUrl.startsWith('https://') && !longUrl.startsWith('http://')) {
         longUrl = `https://${longUrl}`;
     }
+    // check if the url is valid, if not send an error message to the client and stop executing
+    try {
+       await axios.get(longUrl);
+    } catch (err) {
+        res.json({
+            error: 'This URL is invalid. Please, try again.'
+        });
+        return;
+    } 
     // generate a random string
     const shortUrl = nanoid(10);
-
+    // insert the valind long url and the randomly generaten short into the db
     try {
         await db.insertUrl(longUrl, shortUrl);
         res.json({
@@ -28,7 +40,9 @@ app.post('/url', async (req, res) => {
         });
     } catch (err) {
         console.log('error in insertUrl: ', err);
-        res.json({ error: true });
+        res.json({
+            error: 'Unfortunately, an error occured. Please, try again.'
+        });
     }
 });
 
