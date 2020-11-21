@@ -1,10 +1,6 @@
 const { Pool } = require('pg');
-const pool = new Pool({
-    user: 'annaroshchina',
-    host: 'localhost',
-    database: 'urls',
-    port: 5432
-});
+const key = require('./secrets.json');
+const pool = new Pool(key);
 
 module.exports.insertUrl = (longUrl, shortUrl) => {
     return pool.query(
