@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders App', () => {
     render(<App />);
-    const punchline = screen.getByText(/Change mobility for good/i);
-    expect(punchline).toBeInTheDocument();
+    const title = screen.getByText(/shorten your url/i);
+    expect(title).toBeInTheDocument();
 });

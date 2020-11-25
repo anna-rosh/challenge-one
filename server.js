@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const db = require('./db');
 const { nanoid } = require('nanoid');
 const axios = require('axios');
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/url', async (req, res) => {
@@ -22,7 +24,7 @@ app.post('/url', async (req, res) => {
     }
     // check if the url is valid, if not send an error message to the client and stop executing
     try {
-       await axios.get(longUrl);
+        await axios.get(longUrl);
     } catch (err) {
         res.json({
             error: 'This URL is invalid. Please, try again.'
@@ -58,6 +60,10 @@ app.get('/:shortUrl', async (req, res) => {
         res.status(400).send('Invalid URL');
     }
 });
+
+// app.get('*', (req, res) => {
+//     res.sendFile
+// })
 
 app.listen(process.env.PORT || 8080, () => {
     console.log('hello there! the server is listening! 💁');

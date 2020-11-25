@@ -1,42 +1,48 @@
 .App {
   text-align: center;
-  padding: 15px;
 }
 
-.App-logo {
-  height: 50px;
+.App h1 {
+  text-transform: uppercase;
+  font-size: 4em;
+  line-height: 1;
+  letter-spacing: 2px;
   pointer-events: none;
 }
 
-input[type=text] {
-  padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-  margin: 8px;
-  box-sizing: border-box;
-  border: none;
-  background: #f8f9fa;
-  border-bottom: 2px solid #69D2AA;
+form {
+  font-size: 1.2rem;
+}
+
+form p {
+  color: rgb(78, 76, 76);
+}
+
+input {
+  border: 2px solid rgb(27, 27, 27);
+  margin: 10px;
+  font-size: 1.2rem;
+  padding: 0.3rem 1rem;
+  background-color: rgb(241, 238, 238);
+  transition: border 0.2s;
 }
 
 input[type="submit"] {
-    color: #343A40;
-    background-color: #69D2AA;
-    border-color: #69D2AA;
-    cursor: pointer;
-    display: inline-block;
-    font-weight: 400;
-    color: #343A40;
-    text-align: center;
-    vertical-align: middle;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-
+  cursor: pointer;
+  margin: 0;
+  background-color: rgb(27, 27, 27);
+  color: rgb(241, 238, 238);
 }
 
-input[type="submit"]:hover {
-  color: #fff;
+input:focus {
+  outline: none;
+  border: 2px solid magenta;
+}
+
+input[type="text"]:hover {
+  border: 2px solid magenta;
+}
+
+form div {
+  margin-top: 30px;
 }
